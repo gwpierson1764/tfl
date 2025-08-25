@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>TFL Scoreboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <link rel="manifest" href="manifest.json">
   <style>
     body {
       margin: 0;
@@ -13,24 +11,22 @@
       display: flex;
       height: 100vh;
       flex-direction: row;
-      background-color: black;
     }
     .home, .visitor, .center {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: white;
+      color: #003F87;
       padding: 10px;
     }
     .home {
       width: 33.33%;
-      background-color: #003F87;
-      color: #FFFFFF;
+      background-color: #003F87; /* Deep Blue */
     }
     .visitor {
       width: 33.33%;
-      background-color: #C8102E;
+      background-color: #C8102E; /* Red */
     }
     .center {
       width: 33.33%;
@@ -42,6 +38,7 @@
       align-items: center;
       padding: 20px;
     }
+
     .scoreboard-title {
       text-align: center;
       margin-top: 20px;
@@ -50,16 +47,25 @@
       font-size: 16vw;
       font-weight: bold;
       font-style: italic;
-      color: #003F87;
-      text-shadow: -2px -2px 0 #C8102E, 2px -2px 0 #C8102E, -2px 2px 0 #C8102E, 2px 2px 0 #C8102E;
+      color: white;
+      text-shadow:
+        -2px -2px 0 #C8102E,
+         2px -2px 0 #C8102E,
+        -2px  2px 0 #C8102E,
+         2px  2px 0 #C8102E;
     }
     .scoreboard-title .name {
       font-size: 2vw;
       font-weight: bold;
       color: #C8102E;
       letter-spacing: 1px;
-      text-shadow: -1px -1px 0 #003F87, 1px -1px 0 #003F87, -1px 1px 0 #003F87, 1px 1px 0 #003F87;
+      text-shadow:
+        -1px -1px 0 #003F87,
+         1px -1px 0 #003F87,
+        -1px  1px 0 #003F87,
+         1px  1px 0 #003F87;
     }
+
     h1 {
       font-size: 5vw;
       margin: 0.5em 0;
@@ -68,11 +74,9 @@
       font-size: 8vw;
       font-weight: bold;
       color: #003F87;
-      align-items: center;
       margin-bottom: 10px;
     }
     .timer-controls {
-      align-items: center;
       margin-bottom: 20px;
     }
     button {
@@ -95,6 +99,14 @@
       background-color: #003F87;
       color: #FFFFFF;
     }
+
+    /* Possession tracker */
+    .possessions {
+      margin: 10px 0;
+      font-size: 1.5em;
+    }
+
+    /* Modal Styles */
     .modal {
       display: none;
       position: fixed;
@@ -132,51 +144,51 @@
     .kick { background: #003F87; color: white; }
     .twopoint { background: #C8102E; color: white; }
     .nogood { background: gray; color: white; }
-    .possessions { display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
-    .half { margin: 5px 0; }
-    .football { font-size: 1.5em; margin: 0 2px; opacity: 0.2; }
-    .football.active { opacity: 1; }
   </style>
 </head>
 <body>
   <div class="home">
-    <h1 style="color:white;">HOME</h1>
+    <h1>HOME</h1>
     <h1 id="homeScore">0</h1>
+    <div class="possessions">
+      <div>1st Half: <span id="homePoss1">⚪ ⚪</span></div>
+      <div>2nd Half: <span id="homePoss2">⚪ ⚪</span></div>
+    </div>
     <button onclick="touchdown('home')">Touchdown (+6)</button>
     <button onclick="addPoints('home', 3)">Field Goal (+3)</button>
     <button onclick="addPoints('home', 2)">Safety (+2)</button>
-    <div class="possessions" id="homePossessions">
-      <div class="half">1st Half: <span class="football">🏈</span><span class="football">🏈</span><span class="football">🏈</span><span class="football">🏈</span></div>
-      <div class="half">2nd Half: <span class="football">🏈</span><span class="football">🏈</span><span class="football">🏈</span><span class="football">🏈</span></div>
-    </div>
+    <button onclick="endPossession('home')">End Possession</button>
   </div>
 
- <div class="center">
-  <div class="scoreboard-title">
-    <span class="tfl">TFL</span><br>
-    <span class="name">TABLETOP FOOTBALL LEAGUE</span>
-  </div>
-  <div class="bottom-section">
-    <div id="timer">1:00</div>
-    <div class="timer-controls">
-      <button onclick="startTimer()">Start</button>
-      <button onclick="resetTimer()">Reset</button>
+  <div class="center">
+    <div class="scoreboard-title">
+      <span class="tfl">TFL</span><br>
+      <span class="name">TABLETOP FOOTBALL LEAGUE</span>
+    </div>
+    <div class="bottom-section">
+      <div id="timer">1:00</div>
+      <div class="timer-controls">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="resetTimer()">Reset</button>
+        <button onclick="nextHalf()">Switch Half</button>
+      </div>
     </div>
   </div>
-</div>
 
   <div class="visitor">
-    <h1 style="color:white;">VISITOR</h1>
+    <h1>VISITOR</h1>
     <h1 id="visitorScore">0</h1>
+    <div class="possessions">
+      <div>1st Half: <span id="visitorPoss1">⚪ ⚪</span></div>
+      <div>2nd Half: <span id="visitorPoss2">⚪ ⚪</span></div>
+    </div>
     <button onclick="touchdown('visitor')">Touchdown (+6)</button>
     <button onclick="addPoints('visitor', 3)">Field Goal (+3)</button>
     <button onclick="addPoints('visitor', 2)">Safety (+2)</button>
-    <div class="possessions" id="visitorPossessions">
-      <div class="half">1st Half: <span class="football">🏈</span><span class="football">🏈</span><span class="football">🏈</span><span class="football">🏈</span></div>
-      <div class="half">2nd Half: <span class="football">🏈</span><span class="football">🏈</span><span class="football">🏈</span><span class="football">🏈</span></div>
-    </div>
+    <button onclick="endPossession('visitor')">End Possession</button>
   </div>
 
+  <!-- Modal -->
   <div id="extraPointModal" class="modal">
     <div class="modal-content">
       <h2>Try After Touchdown</h2>
@@ -188,13 +200,13 @@
 
   <script>
     let currentTeam = null;
-    let half = 1;
 
+    // --- SCORES ---
     function addPoints(team, points) {
       let scoreEl = document.getElementById(team + "Score");
       let score = parseInt(scoreEl.textContent);
       scoreEl.textContent = score + points;
-      if(points >= 2) updatePossession(team);
+      endPossession(team); // auto increment possessions
     }
 
     function touchdown(team) {
@@ -211,20 +223,44 @@
       currentTeam = null;
     }
 
-    function updatePossession(team) {
-      let container = document.getElementById(team + "Possessions");
-      let halfDiv = container.children[half - 1];
-      let balls = halfDiv.querySelectorAll(".football");
-      for (let ball of balls) {
-        if (!ball.classList.contains("active")) {
-          ball.classList.add("active");
-          break;
-        }
+    // --- POSSESSION TRACKER ---
+    let possessions = {
+      home: { first: 0, second: 0 },
+      visitor: { first: 0, second: 0 }
+    };
+    let half = "first"; // start in 1st half
+
+    function renderPossessions(count) {
+      let max = 2; // 2 per half
+      let icons = "";
+      for (let i = 0; i < max; i++) {
+        icons += (i < count ? "🏈 " : "⚪ ");
+      }
+      return icons.trim();
+    }
+
+    function updatePossessions(team) {
+      document.getElementById(team + "Poss1").textContent =
+        renderPossessions(possessions[team].first);
+      document.getElementById(team + "Poss2").textContent =
+        renderPossessions(possessions[team].second);
+    }
+
+    function endPossession(team) {
+      if (possessions[team][half] < 2) {
+        possessions[team][half]++;
+        updatePossessions(team);
       }
     }
 
+    function nextHalf() {
+      half = (half === "first") ? "second" : "first";
+      alert("Now in " + (half === "first" ? "1st Half" : "2nd Half"));
+    }
+
+    // --- TIMER ---
     let timerEl = document.getElementById("timer");
-    let time = 60;
+    let time = 60; // default 60 seconds
     let countdown;
 
     function resetTimer() {
@@ -236,7 +272,7 @@
     function updateTimer() {
       let minutes = Math.floor(time / 60);
       let seconds = time % 60;
-      timerEl.textContent = 
+      timerEl.textContent =
         `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     }
 
@@ -252,7 +288,10 @@
       }, 1000);
     }
 
+    // initialize display
     updateTimer();
+    updatePossessions("home");
+    updatePossessions("visitor");
   </script>
 </body>
 </html>
