@@ -1,0 +1,9 @@
+{
+  "name": "TFL Scoreboard",
+  "short_name": "TFL",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#003F87",
+  "theme_color": "#003F87",
+  "orientation": "landscape"
+}
