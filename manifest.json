@@ -1,19 +1,19 @@
 {
   "name": "TFL Scoreboard",
   "short_name": "TFL",
-  "start_url": "index.html",
+  "start_url": "./index.html",
   "display": "standalone",
-  "orientation": "landscape",
   "background_color": "#003F87",
   "theme_color": "#C8102E",
+  "orientation": "landscape",
   "icons": [
     {
-      "src": "TFL Logo2.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "TFL Logo2.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
