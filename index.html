@@ -37,16 +37,21 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
+
 
     /* Logo */
     .scoreboard-logo img {
-      max-width: 80%;
+      display: block;
+      margin: 0 auto;       /* centers image left/right */
+      max-width: 80%;       /* scales nicely */
       height: auto;
-      margin-bottom: 10px;
-      align-items: center;
     }
-
+    .scoreboard-logo {
+      text-align: center;   /* centers the image inside */
+      width: 100%;          /* ensures it spans the middle column */
+    }
     h1 {
       font-size: 4.5vw;
       margin: 0.3em 0;
@@ -102,7 +107,7 @@
       margin: 5px;
       position: relative;
     }
-      .football::after {
+    .football::after {
       content: '';
       position: absolute;
       top: 10px;
@@ -177,10 +182,12 @@
     <div class="scoreboard-logo">
       <img src="logo.png" alt="TFL Logo">
     </div>
-    <div id="timer">1:00</div>
-    <div class="timer-controls">
-      <button onclick="startTimer()">Start</button>
-      <button onclick="resetTimer()">Reset</button>
+    <div class="bottom-section">
+      <div id="timer">1:00</div>
+      <div class="timer-controls">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="resetTimer()">Reset</button>
+      </div>
     </div>
   </div>
 
