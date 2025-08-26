@@ -93,11 +93,14 @@
     }
 
     /* Possessions */
-    .possessions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 15px;
+    .possession {
+      font-size: 2em;
+      margin: 5px;
+      cursor: pointer;
+      color: #FFD700; /* gold footballs by default */
+    }
+    .possession.used {
+      color: #000000; /* black when marked used */
     }
     .football {
       width: 40px;
