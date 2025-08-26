@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TFL Scoreboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      flex-direction: row;
+      background: #000;
+    }
+
+    .home, .visitor, .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: 10px;
+    }
+
+    .home {
+      width: 33.33%;
+      background-color: #003F87; /* Deep Blue */
+    }
+
+    .visitor {
+      width: 33.33%;
+      background-color: #C8102E; /* Red */
+    }
+
+    .center {
+      width: 33.33%;
+      background-color: #FFFFFF;
+      color: #003F87;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Logo */
+    .scoreboard-logo {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .scoreboard-logo img {
+      max-width: 80%;
+      height: auto;
+    }
+
+    /* Headings and Scores */
+    h1 {
+      font-size: 5vw;
+      margin: 0.5em 0;
+      color: white;
+    }
+
+    #homeScore, #visitorScore {
+      font-size: 5vw;
+      font-weight: bold;
+      color: white;
+    }
+
+    /* Timer */
+    #timer {
+      font-size: 8vw;
+      font-weight: bold;
+      color: #003F87;
+      margin-bottom: 10px;
+    }
+
+    .timer-controls {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Buttons */
+    button {
+      margin: 5px;
+      padding: 8px 16px; /* slightly smaller */
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .home button {
+      background-color: #FFFFFF;
+      color: #003F87;
+    }
+
+    .visitor button {
+      background-color: #FFFFFF;
+      color: #C8102E;
+    }
+
+    .center button {
+      background-color: #003F87;
+      color: #FFFFFF;
+    }
+
+    /* Possession tracker */
+    .possessions {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .possessions-label {
+      font-weight: bold;
+      margin-top: 5px;
+      color: white;
+    }
+
+    .possession {
+      font-size: 2em;
+      margin: 5px;
+      cursor: pointer;
+      color: #FFD700; /* gold footballs by default */
+    }
+
+    .possession.used {
+      color: #000000; /* black when marked used */
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      color: #003F87;
+    }
+
+    .modal-content button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 15px;
+      font-size: 1.2em;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .kick { background: #003F87; color: white; }
+    .twopoint { background: #C8102E; color: white; }
+    .nogood { background: gray; color: white; }
+  </style>
+</head>
+<body>
+  <!-- Home -->
+  <div class="home">
+    <h1>HOME</h1>
+    <h1 id="homeScore">0</h1>
+    <button onclick="scorePoints('home', 6, true)">Touchdown (+6)</button>
+    <button onclick="scorePoints('home', 3, true)">Field Goal (+3)</button>
+    <button onclick="scorePoints('home', 2, true)">Safety (+2)</button>
+    <button onclick="endPossession('home')">End Possession</button>
+
+    <div class="possessions-label">1st Half</div>
+    <div class="possessions" id="home1st">
+      <span class="possession" onclick="togglePossession(this)">🏈</span>
+      <span class="possession" onclick="togglePossession(this)">🏈</span>
+    </div>
+    <div class="possessions-label">2nd Half</div>
+    <div class="possessions" id="home2nd">
+      <span class="possession" onclick="togglePossession(this)">🏈</span>
+      <span class="possession" onclick="togglePossession(this)">🏈</span>
+    </div>
+  </div>
+
+  <!-- Center -->
+  <div class="center">
+    <div class="scoreboard-logo">
+      <img src="TFL_Logo.png" alt="TFL Logo">
+    </div>
+    <div class="bottom-section">
+      <div id="timer">1:00</div>
+      <div class="timer-controls">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="resetTimer()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visitor -->
+  <div class="visitor">
+    <h1>VISITOR</h1>
+    <h1 id="visitorScore">0</h1>
+    <button onclick="scorePoints('visitor', 6, true)">Touchdown (+6)</button>
+    <button onclick="scorePoints('visitor', 3, true)">Field Goal (+3)</button>
+    <button onclick="scorePoints('visitor', 2, true)">Safety (+2)</button>
+    <button onclick="endPossession('visitor')">End Possession</button>
+
+    <div class="possessions-label">1st Half</div>
+    <div class="possessions" id="visitor1st">
+      <span class="possession" onclick="togglePossession(this)">🏈</span>
+      <span class="possession" onclick="togglePossession(this)">🏈</span>
+    </div>
+    <div class="possessions-label">2nd Half</div>
+    <div class="possessions" id="visitor2nd">
+      <span class="possession" onclick="togglePossession(this)">🏈</span>
+      <span class="possession" onclick="togglePossession(this)">🏈</span>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="extraPointModal" class="modal">
+    <div class="modal-content">
+      <h2>Try After Touchdown</h2>
+      <button class="kick" onclick="extraPoints(1)">Kick Good (+1)</button>
+      <button class="twopoint" onclick="extraPoints(2)">2-Point (+2)</button>
+      <button class="nogood" onclick="extraPoints(0)">No Good (+0)</button>
+    </div>
+  </div>
+
+  <script>
+    let currentTeam = null;
+
+    function updateScore(team, points) {
+      let scoreEl = document.getElementById(team + "Score");
+      let score = parseInt(scoreEl.textContent);
+      scoreEl.textContent = score + points;
+    }
+
+    function scorePoints(team, points, triggersPossession) {
+      if (points === 6) {
+        // Touchdown
+        currentTeam = team;
+        updateScore(team, points);
+        document.getElementById("extraPointModal").style.display = "flex";
+        if (triggersPossession) toggleNextPossession(team);
+      } else {
+        // Field Goal / Safety
+        updateScore(team, points);
+        if (triggersPossession) toggleNextPossession(team);
+      }
+    }
+
+    function extraPoints(points) {
+      if (currentTeam) {
+        updateScore(currentTeam, points);
+      }
+      document.getElementById("extraPointModal").style.display = "none";
+      currentTeam = null;
+    }
+
+    function endPossession(team) {
+      toggleNextPossession(team);
+    }
+
+    function toggleNextPossession(team) {
+      let halves = ["1st", "2nd"];
+      for (let half of halves) {
+        let container = document.getElementById(team + half);
+        let icons = container.querySelectorAll(".possession");
+        for (let icon of icons) {
+          if (!icon.classList.contains("used")) {
+            icon.classList.add("used");
+            return;
+          }
+        }
+      }
+    }
+
+    function togglePossession(el) {
+      el.classList.toggle("used");
+    }
+
+    // Timer
+    let timerEl = document.getElementById("timer");
+    let time = 60;
+    let countdown;
+
+    function resetTimer() {
+      clearInterval(countdown);
+      time = 60;
+      updateTimer();
+    }
+
+    function updateTimer() {
+      let minutes = Math.floor(time / 60);
+      let seconds = time % 60;
+      timerEl.textContent =
+        `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    }
+
+    function startTimer() {
+      clearInterval(countdown);
+      countdown = setInterval(() => {
+        if (time > 0) {
+          time--;
+          updateTimer();
+        } else {
+          clearInterval(countdown);
+        }
+      }, 1000);
+    }
+
+    // Initialize display
+    updateTimer();
+  </script>
+</body>
+</html>
