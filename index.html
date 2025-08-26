@@ -126,6 +126,7 @@
       margin: 5px;
       cursor: pointer;
       color: #FFD700; /* gold footballs by default */
+      transition: color 0.3s;
     }
 
     .possession.used {
@@ -186,13 +187,10 @@
     <button onclick="scorePoints('home', 2, true)">Safety (+2)</button>
     <button onclick="endPossession('home')">End Possession</button>
 
-    <div class="possessions-label">1st Half</div>
-    <div class="possessions" id="home1st">
+    <div class="possessions-label">Possessions</div>
+    <div class="possessions" id="homePossessions">
       <span class="possession" onclick="togglePossession(this)">🏈</span>
       <span class="possession" onclick="togglePossession(this)">🏈</span>
-    </div>
-    <div class="possessions-label">2nd Half</div>
-    <div class="possessions" id="home2nd">
       <span class="possession" onclick="togglePossession(this)">🏈</span>
       <span class="possession" onclick="togglePossession(this)">🏈</span>
     </div>
@@ -221,13 +219,10 @@
     <button onclick="scorePoints('visitor', 2, true)">Safety (+2)</button>
     <button onclick="endPossession('visitor')">End Possession</button>
 
-    <div class="possessions-label">1st Half</div>
-    <div class="possessions" id="visitor1st">
+    <div class="possessions-label">Possessions</div>
+    <div class="possessions" id="visitorPossessions">
       <span class="possession" onclick="togglePossession(this)">🏈</span>
       <span class="possession" onclick="togglePossession(this)">🏈</span>
-    </div>
-    <div class="possessions-label">2nd Half</div>
-    <div class="possessions" id="visitor2nd">
       <span class="possession" onclick="togglePossession(this)">🏈</span>
       <span class="possession" onclick="togglePossession(this)">🏈</span>
     </div>
@@ -279,15 +274,12 @@
     }
 
     function toggleNextPossession(team) {
-      let halves = ["1st", "2nd"];
-      for (let half of halves) {
-        let container = document.getElementById(team + half);
-        let icons = container.querySelectorAll(".possession");
-        for (let icon of icons) {
-          if (!icon.classList.contains("used")) {
-            icon.classList.add("used");
-            return;
-          }
+      let container = document.getElementById(team + "Possessions");
+      let icons = container.querySelectorAll(".possession");
+      for (let icon of icons) {
+        if (!icon.classList.contains("used")) {
+          icon.classList.add("used");
+          return;
         }
       }
     }
