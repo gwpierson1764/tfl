@@ -187,12 +187,13 @@
     <button onclick="scorePoints('home', 2, true)">Safety (+2)</button>
     <button onclick="endPossession('home')">End Possession</button>
 
+    <!-- Home Possessions -->
     <div class="possessions-label">Possessions</div>
     <div class="possessions" id="homePossessions">
-      <span class="possession" onclick="togglePossession(this)">🏈</span>
-      <span class="possession" onclick="togglePossession(this)">🏈</span>
-      <span class="possession" onclick="togglePossession(this)">🏈</span>
-      <span class="possession" onclick="togglePossession(this)">🏈</span>
+      <span class="possession" onclick="togglePossession(this)">⚪</span>
+      <span class="possession" onclick="togglePossession(this)">⚪</span>
+      <span class="possession" onclick="togglePossession(this)">⚪</span>
+      <span class="possession" onclick="togglePossession(this)">⚪</span>
     </div>
   </div>
 
@@ -219,12 +220,13 @@
     <button onclick="scorePoints('visitor', 2, true)">Safety (+2)</button>
     <button onclick="endPossession('visitor')">End Possession</button>
 
+    <!-- Visitor Possessions -->
     <div class="possessions-label">Possessions</div>
     <div class="possessions" id="visitorPossessions">
-      <span class="possession" onclick="togglePossession(this)">🏈</span>
-      <span class="possession" onclick="togglePossession(this)">🏈</span>
-      <span class="possession" onclick="togglePossession(this)">🏈</span>
-      <span class="possession" onclick="togglePossession(this)">🏈</span>
+      <span class="possession" onclick="togglePossession(this)">⚪</span>
+      <span class="possession" onclick="togglePossession(this)">⚪</span>
+      <span class="possession" onclick="togglePossession(this)">⚪</span>
+      <span class="possession" onclick="togglePossession(this)">⚪</span>
     </div>
   </div>
 
@@ -277,15 +279,15 @@
       let container = document.getElementById(team + "Possessions");
       let icons = container.querySelectorAll(".possession");
       for (let icon of icons) {
-        if (!icon.classList.contains("used")) {
-          icon.classList.add("used");
+        if (icon.textContent === "⚪") {
+          icon.textContent = "⚫"; // mark as used
           return;
         }
       }
     }
 
     function togglePossession(el) {
-      el.classList.toggle("used");
+      el.textContent = (el.textContent === "⚪") ? "⚫" : "⚪";
     }
 
     // Timer
