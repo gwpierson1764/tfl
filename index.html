@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -43,14 +43,14 @@
 
     /* Logo */
     .scoreboard-logo img {
-      display: block;
-      margin: 0 auto;       /* centers image left/right */
-      max-width: 80%;       /* scales nicely */
+      max-width: 80%;   /* scales with screen size */
       height: auto;
     }
     .scoreboard-logo {
-      text-align: center;   /* centers the image inside */
-      width: 100%;          /* ensures it spans the middle column */
+      width: 100%;
+      display: flex;
+      justify-content: center;  /* centers horizontally */
+      align-items: center;      /* optional, for vertical centering if needed */
     }
     h1 {
       font-size: 4.5vw;
